@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RD Games - Reflexo</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#101820;color:white;
+ font-family:Arial,sans-serif;text-align:center;
+}
+header{padding:22px;color:#f5a623;font-size:28px;font-weight:bold}
+main{padding:15px}
+.score{font-size:22px;margin:15px}
+#arena{
+ position:relative;height:60vh;min-height:320px;
+ background:#1d2c38;border:2px solid #f5a623;
+ border-radius:18px;overflow:hidden;
+}
+#target{
+ display:none;position:absolute;width:65px;height:65px;
+ border-radius:50%;background:#f5a623;
+ box-shadow:0 0 20px #f5a623;
+ border:4px solid white;cursor:pointer;
+}
+button{
+ background:#f5a623;color:#101820;border:0;
+ padding:15px 30px;border-radius:12px;
+ font-size:18px;font-weight:bold;margin:15px;
+}
+#message{font-size:18px;margin:15px}
+</style>
+</head>
+<body>
+<header>RD GAMES</header>
+<main>
+<h2>DESAFIO DE REFLEXO</h2>
+<div class="score">
+ Pontos: <span id="score">0</span> |
+ Tempo: <span id="time">30</span>s
+</div>
+<div id="arena">
+ <div id="target"></div>
+</div>
+<button id="start">COMEÇAR JOGO</button>
+<div id="message">Toque nos círculos o mais rápido possível!</div>
+</main>
+<script>
+let score=0,time=30,playing=false,timer;
+const target=document.getElementById("target");
+const arena=document.getElementById("arena");
+const scoreText=document.getElementById("score");
+const timeText=document.getElementById("time");
+const message=document.getElementById("message");
+const start=document.getElementById("start");
+
+function moveTarget(){
+ const maxX=arena.clientWidth-65;
+ const maxY=arena.clientHeight-65;
+ target.style.left=Math.random()*maxX+"px";
+ target.style.top=Math.random()*maxY+"px";
+}
+
+start.onclick=()=>{
+ if(playing)return;
+ score=0;time=30;playing=true;
+ scoreText.textContent=score;
+ timeText.textContent=time;
+ message.textContent="VAI! ACERTE OS CÍRCULOS!";
+ start.disabled=true;
+ target.style.display="block";
+ moveTarget();
+ timer=setInterval(()=>{
+  time--;
+  timeText.textContent=time;
+  if(time<=0){
+   clearInterval(timer);
+   playing=false;
+   target.style.display="none";
+   start.disabled=false;
+   message.textContent="FIM DE JOGO! Você fez "+score+" pontos!";
+  }
+ },1000);
+};
+
+target.onclick=()=>{
+ if(!playing)return;
+ score++;
+ scoreText.textContent=score;
+ moveTarget();
+};
+</script>
+</body>
+</html>
